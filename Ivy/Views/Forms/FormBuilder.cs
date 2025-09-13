@@ -472,6 +472,21 @@ public class FormBuilder<TModel> : ViewBase
     }
 
     /// <summary>
+    /// Places the specified fields to span the full width across all columns.
+    /// </summary>
+    /// <param name="fields">The fields to place at full width.</param>
+    /// <returns>The form builder instance for method chaining.</returns>
+    /// <remarks>
+    /// Full-width fields are rendered separately from the column layout and span the entire
+    /// form width. They are useful for fields like text areas, long descriptions, or other
+    /// content that benefits from maximum horizontal space.
+    /// </remarks>
+    public FormBuilder<TModel> PlaceFullWidth(params Expression<Func<TModel, object>>[] fields)
+    {
+        return _Place(-1, null, fields); // Use -1 to indicate full width
+    }
+
+    /// <summary>
     /// Groups the specified fields under a named section in the specified column.
     /// </summary>
     /// <param name="group">The name of the group for organizing related fields.</param>

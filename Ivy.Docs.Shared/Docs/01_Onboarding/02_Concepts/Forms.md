@@ -184,6 +184,45 @@ public class LayoutControlExample : ViewBase
 }
 ```
 
+### Full-Width Fields
+
+Use `.PlaceFullWidth()` to make fields span the entire form width across all columns.
+
+```csharp demo-tabs
+public class FullWidthFieldsExample : ViewBase
+{
+    public record ProductModel(
+        string Name,
+        string Category,
+        decimal Price,
+        string Description,
+        string Tags,
+        string Notes
+    );
+
+    public override object? Build()
+    {
+        var product = UseState(() => new ProductModel("", "", 0.0m, "", "", ""));
+        
+        return product.ToForm()
+            .Place(m => m.Name)                      // First column
+            .Place(1, m => m.Category, m => m.Price) // Second column
+            .PlaceFullWidth(m => m.Description)      // Full width
+            .PlaceFullWidth(m => m.Tags)             // Full width
+            .PlaceFullWidth(m => m.Notes)            // Full width
+            .Builder(m => m.Description, s => s.ToTextAreaInput())
+            .Builder(m => m.Tags, s => s.ToTextAreaInput())
+            .Builder(m => m.Notes, s => s.ToTextAreaInput())
+            .Label(m => m.Name, "Product Name")
+            .Label(m => m.Category, "Category")
+            .Label(m => m.Price, "Price")
+            .Label(m => m.Description, "Product Description")
+            .Label(m => m.Tags, "Tags (comma-separated)")
+            .Label(m => m.Notes, "Additional Notes");
+    }
+}
+```
+
 ### Grouped Fields
 
 Organize related fields into logical groups using `.Group()`.

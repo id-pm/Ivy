@@ -207,7 +207,7 @@ public interface IFormFieldBinding<TModel>
 public class FormView<TModel>(IFormFieldView[] fieldViews) : ViewBase
 {
     /// <summary>
-    /// Builds the complete form layout with multi-column support and field grouping.
+    /// Builds the complete form layout with multi-column support, field grouping, and full-width fields.
     /// </summary>
     public override object? Build()
     {
@@ -225,9 +225,16 @@ public class FormView<TModel>(IFormFieldView[] fieldViews) : ViewBase
                     .GroupBy(f => f.Layout.RowKey).Select(e => e.ToArray()).Select(RenderRow));
         }
 
-        var columns = fieldViews
+        // Separate full-width fields (column -1) from regular column fields
+        var fullWidthFields = fieldViews.Where(f => f.Layout.Column == -1).ToArray();
+        var columnFields = fieldViews.Where(f => f.Layout.Column >= 0).ToArray();
+
+        var columnGroups = columnFields
             .GroupBy(e => e.Layout.Column)
             .OrderBy(e => e.Key)
+            .ToArray();
+
+        var columns = columnGroups
             .Select(e => Layout.Vertical(
                 e.GroupBy(f => f.Layout.Group)
                     //.OrderBy(f => _groups.IndexOf(f.Key))
@@ -239,6 +246,43 @@ public class FormView<TModel>(IFormFieldView[] fieldViews) : ViewBase
                         )).Cast<object>().ToArray()
                     .ToArray()));
 
-        return new Form(Layout.Horizontal(columns));
+        // Render full-width fields
+        object? fullWidthSection = null;
+        if (fullWidthFields.Length > 0)
+        {
+            fullWidthSection = Layout.Vertical(
+                fullWidthFields
+                    .GroupBy(f => f.Layout.Group)
+                    .Select(f =>
+                        Layout.Vertical(
+                            f.Key == null
+                                ? RenderRows(f.Select(g => g).ToArray())
+                                : new Expandable(f.Key, RenderRows(f.ToArray()))
+                        )).Cast<object>().ToArray()
+            );
+        }
+
+        // Render column section
+        object? columnSection = null;
+        if (columnGroups.Length > 0)
+        {
+            // If there's only one column, render it directly to allow full width
+            // Otherwise, use horizontal layout for multi-column forms
+            if (columnGroups.Length == 1)
+            {
+                columnSection = columns.First();
+            }
+            else
+            {
+                columnSection = Layout.Horizontal(columns);
+            }
+        }
+
+        // Combine full-width and column sections
+        var formContent = new List<object>();
+        if (fullWidthSection != null) formContent.Add(fullWidthSection);
+        if (columnSection != null) formContent.Add(columnSection);
+
+        return new Form(formContent.Count == 1 ? formContent.First() : Layout.Vertical(formContent.ToArray()));
     }
 }

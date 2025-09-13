@@ -71,6 +71,14 @@ public record DatabaseGeneratorModel(
 public record UserModel(
     string Name, string Password, bool IsAwesome, DateTime BirthDate, int Height, int UserId = 123, Gender Gender = Gender.Male, string Json = "{}", List<Fruits> FavoriteFruits = null!);
 
+public record ProductTestModel(
+    string Name,
+    string Category,
+    decimal Price,
+    string Description,
+    string Notes
+);
+
 [App(icon: Icons.Clipboard)]
 public class FormApp : SampleBase
 {
@@ -143,6 +151,34 @@ public class FormApp : SampleBase
             ).Width(1 / 2f)
         );
 
+        // Full-width field test
+        var productModel = UseState(() => new ProductTestModel("", "", 0.0m, "", ""));
+
+        FormBuilder<ProductTestModel> BuildProductForm(IState<ProductTestModel> x) =>
+            x.ToForm()
+                .Place(m => m.Name)                      // First column
+                .Place(1, m => m.Category, m => m.Price) // Second column
+                .PlaceFullWidth(m => m.Description)      // Full width
+                .PlaceFullWidth(m => m.Notes)            // Full width
+                .Builder(m => m.Description, s => s.ToTextAreaInput())
+                .Builder(m => m.Notes, s => s.ToTextAreaInput())
+                .Label(m => m.Name, "Product Name")
+                .Label(m => m.Category, "Category")
+                .Label(m => m.Price, "Price")
+                .Label(m => m.Description, "Product Description")
+                .Label(m => m.Notes, "Additional Notes");
+
+        var fullWidthForm = Layout.Horizontal(
+            new Card(
+                    BuildProductForm(productModel)
+                )
+                .Width(1 / 2f)
+                .Title("Full-Width Fields Test"),
+            new Card(
+                productModel.ToDetails()
+            ).Width(1 / 2f)
+        );
+
         return Layout.Vertical()
                | (Layout.Horizontal()
                   | new Button("Open in Sheet").ToTrigger((isOpen) => BuildForm(model).ToSheet(isOpen, "User Information", "Please fill in the form."))
@@ -152,6 +188,9 @@ public class FormApp : SampleBase
                | new Separator()
                | Text.H3("Database Generator Form Test")
                | databaseForm
+               | new Separator()
+               | Text.H3("Full-Width Fields Test")
+               | fullWidthForm
             ;
     }
 }
