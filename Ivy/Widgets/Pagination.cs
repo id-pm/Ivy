@@ -3,20 +3,14 @@ using Ivy.Core;
 // ReSharper disable once CheckNamespace
 namespace Ivy;
 
-/// <summary>
-/// A pagination control that allows users to navigate through pages of content.
-/// It displays page numbers, next/previous buttons, and handles user interactions
-/// to change the current page.
-/// </summary>
+/// <summary>Pagination control allowing users to navigate through pages of content with page numbers and next/previous buttons.</summary>
 public record Pagination : WidgetBase<Pagination>
 {
-    /// <summary>
-    /// Initializes a new instance with an explicit value.
-    /// </summary>
-    /// <param name="page">The initial page, starting from 1.</param>
-    /// <param name="numPages">The total number of pages</param>
-    /// <param name="onChange">Event handler called when the page changes.</param>
-    /// <param name="disabled">Whether the input should be disabled initially.</param>
+    /// <summary>Initializes Pagination with explicit value.</summary>
+    /// <param name="page">Initial page, starting from 1.</param>
+    /// <param name="numPages">Total number of pages.</param>
+    /// <param name="onChange">Event handler called when page changes.</param>
+    /// <param name="disabled">Whether input should be disabled initially.</param>
     public Pagination(int? page, int? numPages, Func<Event<Pagination, int>, ValueTask> onChange, bool disabled = false)
     {
         Page = page;
@@ -25,13 +19,11 @@ public record Pagination : WidgetBase<Pagination>
         Disabled = disabled;
     }
 
-    /// <summary>
-    /// Initializes a new instance with an explicit value.
-    /// </summary>
-    /// <param name="page">The initial page, starting from 1.</param>
-    /// <param name="numPages">The total number of pages</param>
-    /// <param name="onChange">Event handler called when the page changes.</param>
-    /// <param name="disabled">Whether the input should be disabled initially.</param>
+    /// <summary>Initializes Pagination with explicit value.</summary>
+    /// <param name="page">Initial page, starting from 1.</param>
+    /// <param name="numPages">Total number of pages.</param>
+    /// <param name="onChange">Event handler called when page changes.</param>
+    /// <param name="disabled">Whether input should be disabled initially.</param>
     public Pagination(int? page, int? numPages, Action<Event<Pagination, int>> onChange, bool disabled = false)
     {
         Page = page;
@@ -40,79 +32,49 @@ public record Pagination : WidgetBase<Pagination>
         Disabled = disabled;
     }
 
-    /// <summary>
-    /// Gets or sets the page value, starting from 1.
-    /// 
-    /// When null, no page will be highlighted.
-    /// </summary>
+    /// <summary>Page value starting from 1. When null, no page highlighted.</summary>
     [Prop] public int? Page { get; set; }
 
-    /// <summary>
-    /// Gets or sets the total number of pages to display.
-    /// 
-    /// When null, only the previous and next buttons will be displayed.
-    /// </summary>
+    /// <summary>Total number of pages to display. When null, only previous and next buttons displayed.</summary>
     [Prop] public int? NumPages { get; set; }
 
-    /// <summary>
-    /// Gets or sets the number of siblings to use. The siblings control how many
-    /// page numbers are displayed adjacent to the current page. Defaults to 1.
-    /// </summary>
+    /// <summary>Number of siblings controlling page numbers displayed adjacent to current page. Defaults to 1.</summary>
     [Prop] public int? Siblings { get; set; }
 
-    /// <summary>
-    /// Gets or sets the number of boundaries to use. The boundaries control how
-    /// many page numbers are displayed at the beginning and end of the pagination
-    /// control. Defaults to 1.
-    /// </summary>
+    /// <summary>Number of boundaries controlling page numbers displayed at beginning and end of pagination. Defaults to 1.</summary>
     [Prop] public int? Boundaries { get; set; }
 
-    /// <summary>
-    /// Gets or sets whether the pagination widget is disabled and cannot be 
-    /// interacted with. This property controls the interactive state of the 
-    /// widget, preventing users from changing the current page when true.
-    /// </summary>
+    /// <summary>Whether pagination widget is disabled and cannot be interacted with.</summary>
     [Prop] public bool Disabled { get; set; } = false;
 
     /// <summary>Gets the event handler called when the page value changes.</summary>
     [Event] public Func<Event<Pagination, int>, ValueTask>? OnChange { get; }
 }
 
-/// <summary>
-/// Provides extension methods for the Pagination widget.
-/// </summary>
+/// <summary>Extension methods for Pagination widget.</summary>
 public static class PaginationExtensions
 {
-    /// <summary>
-    /// Sets the Siblings property of the pagination widget.
-    /// </summary>
-    /// <param name="siblings">The number of siblings to show.</param>
-    /// <returns>The Pagination instance for method chaining.</returns>
+    /// <summary>Sets Siblings property of pagination widget.</summary>
+    /// <param name="siblings">Number of siblings to show.</param>
+    /// <returns>Pagination instance for method chaining.</returns>
     public static Pagination Siblings(this Pagination widget, int siblings)
     {
         widget.Siblings = siblings;
         return widget;
     }
 
-    /// <summary>
-    /// Sets the Boundaries property of the pagination widget.
-    /// </summary>
-    /// <param name="boundaries">The number of boundaries to show.</param>
-    /// <returns>The Pagination instance for method chaining.</returns>
+    /// <summary>Sets Boundaries property of pagination widget.</summary>
+    /// <param name="boundaries">Number of boundaries to show.</param>
+    /// <returns>Pagination instance for method chaining.</returns>
     public static Pagination Boundaries(this Pagination widget, int boundaries)
     {
         widget.Boundaries = boundaries;
         return widget;
     }
 
-    /// <summary>
-    /// Sets the disabled state of the pagination widget.
-    /// 
-    /// When disabled, the page cannot be changed and buttons will be
-    /// greyed out.
-    /// </summary>
-    /// <param name="disabled">Whether the widget should be disabled.</param>
-    /// <returns>The Pagination instance for method chaining.</returns>
+    /// <summary>Sets disabled state of pagination widget. When disabled, page cannot be changed and buttons greyed out.</summary>
+    /// <param name="disabled">Whether widget should be disabled.</param>
+    /// <returns>Pagination instance for method chaining.</returns>
     public static Pagination Disabled(this Pagination widget, bool disabled)
     {
         widget.Disabled = disabled;

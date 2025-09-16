@@ -5,53 +5,39 @@ using Ivy.Core.Helpers;
 
 namespace Ivy.Core;
 
-/// <summary>
-/// Abstract base class for all widgets in the Ivy Framework. Provides core functionality for widget serialization,
-/// event handling, attached properties, and child widget management.
-/// </summary>
+/// <summary>Abstract base class for all widgets providing core functionality for serialization, event handling, attached properties, and child management.</summary>
 public abstract record AbstractWidget : IWidget
 {
     private string? _id;
     private readonly Dictionary<(Type, string), object?> _attachedProps = new();
 
-    /// <summary>
-    /// Initializes a new instance of the AbstractWidget class with the specified child widgets.
-    /// </summary>
-    /// <param name="children">The child widgets to be contained within this widget.</param>
+    /// <summary>Initializes AbstractWidget with specified child widgets.</summary>
+    /// <param name="children">Child widgets to be contained within this widget.</param>
     protected AbstractWidget(params object[] children)
     {
         Children = children;
     }
 
-    /// <summary>
-    /// Sets an attached property value for this widget. Attached properties are used by parent widgets
-    /// to store layout or behavior information on their child widgets.
-    /// </summary>
-    /// <param name="parentType">The type of the parent widget that defines the attached property.</param>
-    /// <param name="name">The name of the attached property.</param>
-    /// <param name="value">The value to set for the attached property.</param>
+    /// <summary>Sets attached property value for this widget used by parent widgets to store layout or behavior information.</summary>
+    /// <param name="parentType">Type of parent widget defining attached property.</param>
+    /// <param name="name">Name of attached property.</param>
+    /// <param name="value">Value to set for attached property.</param>
     public void SetAttachedValue(Type parentType, string name, object? value)
     {
         _attachedProps[(parentType, name)] = value;
     }
 
-    /// <summary>
-    /// Gets an attached property value for this widget. Returns null if the attached property has not been set.
-    /// </summary>
-    /// <param name="t">The type of the parent widget that defines the attached property.</param>
-    /// <param name="name">The name of the attached property to retrieve.</param>
-    /// <returns>The value of the attached property, or null if not set.</returns>
+    /// <summary>Gets attached property value for this widget. Returns null if not set.</summary>
+    /// <param name="t">Type of parent widget defining attached property.</param>
+    /// <param name="name">Name of attached property to retrieve.</param>
+    /// <returns>Value of attached property, or null if not set.</returns>
     public object? GetAttachedValue(Type t, string name)
     {
         return _attachedProps.GetValueOrDefault((t, name));
     }
 
-    /// <summary>
-    /// Gets or sets the unique identifier for this widget instance. The Id is required for widget serialization
-    /// and must be set before accessing this property.
-    /// </summary>
-    /// <value>The unique identifier of the widget.</value>
-    /// <exception cref="InvalidOperationException">Thrown when trying to access an uninitialized Id.</exception>
+    /// <summary>Unique identifier for widget instance required for serialization. Must be set before accessing.</summary>
+    /// <exception cref="InvalidOperationException">Thrown when trying to access uninitialized Id.</exception>
     public string? Id
     {
         get
@@ -65,24 +51,14 @@ public abstract record AbstractWidget : IWidget
         set => _id = value;
     }
 
-    /// <summary>
-    /// Gets or sets an optional key for this widget. Keys are used for widget identification and optimization
-    /// during rendering and updates.
-    /// </summary>
-    /// <value>The key of the widget, or null if no key is set.</value>
+    /// <summary>Optional key for widget identification and optimization during rendering and updates.</summary>
     public string? Key { get; set; }
 
-    /// <summary>
-    /// Gets or sets the child widgets contained within this widget.
-    /// </summary>
-    /// <value>An array of child objects, which should be widgets for proper serialization.</value>
+    /// <summary>Child widgets contained within this widget.</summary>
     public object[] Children { get; set; }
 
-    /// <summary>
-    /// Serializes this widget and its children to a JSON representation. This method processes all properties
-    /// marked with <see cref="PropAttribute"/> and events marked with <see cref="EventAttribute"/>.
-    /// </summary>
-    /// <returns>A JSON node representing the serialized widget.</returns>
+    /// <summary>Serializes widget and children to JSON processing properties marked with <see cref="PropAttribute"/> and events marked with <see cref="EventAttribute"/>.</summary>
+    /// <returns>JSON node representing serialized widget.</returns>
     /// <exception cref="InvalidOperationException">Thrown when children contain non-widget objects.</exception>
     public JsonNode Serialize()
     {
@@ -139,12 +115,9 @@ public abstract record AbstractWidget : IWidget
         return json;
     }
 
-    /// <summary>
-    /// Gets the value of a property for serialization. Handles both regular properties and attached properties.
-    /// For attached properties, collects values from all child widgets.
-    /// </summary>
-    /// <param name="property">The property to get the value for.</param>
-    /// <returns>The property value, or an array of values for attached properties.</returns>
+    /// <summary>Gets property value for serialization handling regular and attached properties.</summary>
+    /// <param name="property">Property to get value for.</param>
+    /// <returns>Property value, or array of values for attached properties.</returns>
     /// <exception cref="InvalidOperationException">Thrown when attached properties are not arrays of nullable types.</exception>
     private object? GetPropertyValue(PropertyInfo property)
     {
@@ -174,13 +147,10 @@ public abstract record AbstractWidget : IWidget
         return value;
     }
 
-    /// <summary>
-    /// Invokes an event handler on this widget with the specified arguments. Supports both parameterless
-    /// and parameterized event handlers using the Event&lt;T&gt; and Event&lt;T, TValue&gt; patterns.
-    /// </summary>
-    /// <param name="eventName">The name of the event to invoke.</param>
-    /// <param name="args">The arguments to pass to the event handler.</param>
-    /// <returns>true if the event was successfully invoked; otherwise, false.</returns>
+    /// <summary>Invokes event handler on widget with specified arguments supporting Event&lt;T&gt; and Event&lt;T, TValue&gt; patterns.</summary>
+    /// <param name="eventName">Name of event to invoke.</param>
+    /// <param name="args">Arguments to pass to event handler.</param>
+    /// <returns>true if event was successfully invoked; otherwise, false.</returns>
     public bool InvokeEvent(string eventName, JsonArray args)
     {
         var type = GetType();
@@ -254,13 +224,10 @@ public abstract record AbstractWidget : IWidget
         return true;
     }
 
-    /// <summary>
-    /// Overloads the | operator to provide a convenient syntax for adding children to a widget.
-    /// Supports adding single objects, arrays, or enumerables of children.
-    /// </summary>
-    /// <param name="widget">The widget to add children to.</param>
-    /// <param name="child">The child object, array, or enumerable to add.</param>
-    /// <returns>A new widget instance with the additional children.</returns>
+    /// <summary>Overloads | operator for convenient syntax to add children supporting single objects, arrays, or enumerables.</summary>
+    /// <param name="widget">Widget to add children to.</param>
+    /// <param name="child">Child object, array, or enumerable to add.</param>
+    /// <returns>New widget instance with additional children.</returns>
     public static AbstractWidget operator |(AbstractWidget widget, object child)
     {
         if (child is object[] array)

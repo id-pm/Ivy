@@ -62,23 +62,15 @@ public enum TextVariant
     Strong
 }
 
-/// <summary>
-/// A low-level text widget that renders text content with customizable styling and variants.
-/// </summary>
-/// <remarks>
-/// This widget is rarely used directly. Instead, use the <c>Text</c> helper class which provides 
-/// a more user-friendly API for creating text elements with various styles and formatting options.
-/// </remarks>
+/// <summary>Low-level text widget rendering text content with customizable styling and variants. Rarely used directly - use Text helper instead.</summary>
 public record TextBlock : WidgetBase<TextBlock>
 {
-    /// <summary>
-    /// Initializes a new TextBlock with the specified content and styling options.
-    /// </summary>
-    /// <param name="content">The text content to display.</param>
-    /// <param name="variant">The text variant that determines styling and semantic meaning.</param>
-    /// <param name="width">Optional width constraint for the text.</param>
+    /// <summary>Initializes TextBlock with specified content and styling options.</summary>
+    /// <param name="content">Text content to display.</param>
+    /// <param name="variant">Text variant determining styling and semantic meaning.</param>
+    /// <param name="width">Optional width constraint for text.</param>
     /// <param name="strikeThrough">Whether to apply strikethrough styling.</param>
-    /// <param name="color">Optional color override for the text.</param>
+    /// <param name="color">Optional color override for text.</param>
     /// <param name="noWrap">Whether to prevent text wrapping.</param>
     /// <param name="overflow">How to handle text overflow.</param>
     internal TextBlock(string content = "", TextVariant variant = TextVariant.Literal, Size? width = null,
@@ -93,27 +85,21 @@ public record TextBlock : WidgetBase<TextBlock>
         Overflow = overflow;
     }
 
-    /// <summary>Gets or sets how text overflow is handled.</summary>
-    /// <value>The overflow behavior for text that exceeds the container bounds.</value>
+    /// <summary>How text overflow is handled.</summary>
     [Prop] public Overflow? Overflow { get; set; }
 
-    /// <summary>Gets or sets whether text wrapping is disabled.</summary>
-    /// <value>True to prevent text from wrapping to new lines, false to allow wrapping.</value>
+    /// <summary>Whether text wrapping is disabled.</summary>
     [Prop] public bool NoWrap { get; set; }
 
-    /// <summary>Gets or sets the text content to display.</summary>
-    /// <value>The text content string.</value>
+    /// <summary>Text content to display.</summary>
     [Prop] public string Content { get; set; }
 
-    /// <summary>Gets or sets the text variant that determines styling and semantic meaning.</summary>
-    /// <value>The text variant from the TextVariant enumeration.</value>
+    /// <summary>Text variant determining styling and semantic meaning.</summary>
     [Prop] public TextVariant Variant { get; set; }
 
-    /// <summary>Gets or sets whether strikethrough styling is applied.</summary>
-    /// <value>True to apply strikethrough styling, false for normal text.</value>
+    /// <summary>Whether strikethrough styling is applied.</summary>
     [Prop] public bool StrikeThrough { get; set; }
 
-    /// <summary>Gets or sets the color override for the text.</summary>
-    /// <value>The color from the Colors enumeration, or null to use the default color for the variant.</value>
+    /// <summary>Color override for text, or null to use default color for variant.</summary>
     [Prop] public Colors? Color { get; set; }
 }

@@ -3,21 +3,16 @@ using Ivy.Core;
 // ReSharper disable once CheckNamespace
 namespace Ivy;
 
-/// <summary>
-/// An audio recorder control that allows users to upload audio using their
-/// microphone. Audio is uploaded either when recording stops, or continuously
-/// with a specific chunk interval.
-/// </summary>
+/// <summary>Audio recorder control allowing users to upload audio using microphone with configurable upload intervals.</summary>
 public record AudioRecorder : WidgetBase<AudioRecorder>
 {
-    /// <summary>
-    /// Initializes a new instance with basic configuration.
-    /// </summary>
-    /// <param name="placeholder">Optional placeholder text displayed when no audio is recording.</param>
-    /// <param name="mimeType">The mime type of the recorded audio data (e.g., "audio/webm").</param>
-    /// <param name="chunkInterval">The chunk size, in milliseconds, for continuous chunked uploads. If null, audio will be uploaded once recording stops.</param>
-    /// <param name="uploadUrl">The upload URL for automatic audio file uploads.</param>
-    /// <param name="disabled">Whether the widget should be disabled initially.</param>
+    /// <summary>Initializes AudioRecorder with basic configuration.</summary>
+    /// <param name="label">Label text displayed when no audio is recording.</param>
+    /// <param name="recordingLabel">Label text displayed when audio is recording.</param>
+    /// <param name="mimeType">Mime type of recorded audio data (e.g., "audio/webm").</param>
+    /// <param name="chunkInterval">Chunk size in milliseconds for continuous uploads. If null, uploads when recording stops.</param>
+    /// <param name="uploadUrl">Upload URL for automatic audio file uploads.</param>
+    /// <param name="disabled">Whether widget should be disabled initially.</param>
     public AudioRecorder(string? label = null, string? recordingLabel = null, string mimeType = "audio/webm", int? chunkInterval = null, string? uploadUrl = null, bool disabled = false)
     {
         Label = label;
@@ -47,9 +42,7 @@ public record AudioRecorder : WidgetBase<AudioRecorder>
     [Prop] public string? UploadUrl { get; set; }
 }
 
-/// <summary>
-/// Provides extension methods for configuring audio recorders.
-/// </summary>
+/// <summary>Extension methods for configuring audio recorders.</summary>
 public static class AudioRecorderExtensions
 {
     /// <summary>Sets the label text to display when no audio is recording.</summary>

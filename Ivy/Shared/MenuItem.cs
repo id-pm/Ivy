@@ -20,19 +20,17 @@ public enum MenuItemVariant
     Group
 }
 
-/// <summary>
-/// Represents a menu item with hierarchical structure, icons, shortcuts, and selection handling.
-/// </summary>
-/// <param name="Label">The display text for the menu item.</param>
+/// <summary>Menu item with hierarchical structure, icons, shortcuts, and selection handling.</summary>
+/// <param name="Label">Display text for menu item.</param>
 /// <param name="Children">Child menu items for creating hierarchical menus.</param>
-/// <param name="Icon">Optional icon to display alongside the label.</param>
+/// <param name="Icon">Optional icon to display alongside label.</param>
 /// <param name="Tag">Associated data object for identification and event handling.</param>
-/// <param name="Variant">The visual and behavioral variant of the menu item.</param>
-/// <param name="Checked">Whether the item is checked (for Checkbox and Radio variants).</param>
-/// <param name="Disabled">Whether the item is disabled and non-interactive.</param>
+/// <param name="Variant">Visual and behavioral variant of menu item.</param>
+/// <param name="Checked">Whether item is checked (for Checkbox and Radio variants).</param>
+/// <param name="Disabled">Whether item is disabled and non-interactive.</param>
 /// <param name="Shortcut">Keyboard shortcut text to display.</param>
 /// <param name="Expanded">Whether child items are expanded in hierarchical menus.</param>
-/// <param name="OnSelect">Event handler called when the item is selected.</param>
+/// <param name="OnSelect">Event handler called when item is selected.</param>
 public record MenuItem(
     string? Label = null,
     MenuItem[]? Children = null,
@@ -49,13 +47,13 @@ public record MenuItem(
     /// <summary>Creates a separator menu item for visual grouping.</summary>
     public static MenuItem Separator() => new(Variant: MenuItemVariant.Separator);
 
-    /// <summary>Creates a checkbox menu item with toggle functionality.</summary>
-    /// <param name="label">The display text for the checkbox item.</param>
+    /// <summary>Creates checkbox menu item with toggle functionality.</summary>
+    /// <param name="label">Display text for checkbox item.</param>
     /// <param name="tag">Optional tag for identification, defaults to label if null.</param>
     public static MenuItem Checkbox(string label, object? tag = null) => new(Variant: MenuItemVariant.Checkbox, Label: label, Tag: tag ?? label);
 
-    /// <summary>Creates a standard clickable menu item.</summary>
-    /// <param name="label">The display text for the menu item.</param>
+    /// <summary>Creates standard clickable menu item.</summary>
+    /// <param name="label">Display text for menu item.</param>
     /// <param name="tag">Optional tag for identification, defaults to label if null.</param>
     public static MenuItem Default(string label, object? tag = null)
         => new(Variant: MenuItemVariant.Default, Label: label, Tag: tag ?? label);
@@ -72,15 +70,11 @@ public record MenuItem(
     }
 }
 
-/// <summary>
-/// Extension methods for MenuItem manipulation and fluent configuration.
-/// </summary>
+/// <summary>Extension methods for MenuItem manipulation and fluent configuration.</summary>
 public static class MenuItemExtensions
 {
-    /// <summary>
-    /// Flattens a hierarchical menu structure into a flat enumerable sequence.
-    /// </summary>
-    /// <param name="menuItem">The menu items to flatten.</param>
+    /// <summary>Flattens hierarchical menu structure into flat enumerable sequence.</summary>
+    /// <param name="menuItem">Menu items to flatten.</param>
     /// <returns>All menu items including nested children in depth-first order.</returns>
     public static IEnumerable<MenuItem> Flatten(this IEnumerable<MenuItem> menuItem)
     {
@@ -97,12 +91,10 @@ public static class MenuItemExtensions
         }
     }
 
-    /// <summary>
-    /// Finds and returns the selection handler for a menu item matching the specified value.
-    /// </summary>
-    /// <param name="menuItem">The menu items to search through.</param>
-    /// <param name="value">The tag or label value to match against.</param>
-    /// <returns>The selection handler action, or null if no matching item is found.</returns>
+    /// <summary>Finds and returns selection handler for menu item matching specified value.</summary>
+    /// <param name="menuItem">Menu items to search through.</param>
+    /// <param name="value">Tag or label value to match against.</param>
+    /// <returns>Selection handler action, or null if no matching item found.</returns>
     public static Action? GetSelectHandler(this MenuItem[] menuItem, object value)
     {
         foreach (var item in menuItem)

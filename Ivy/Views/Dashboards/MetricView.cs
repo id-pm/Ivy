@@ -78,13 +78,13 @@ public class MetricView(
                     | Text.H4(x.MetricFormatted).NoWrap().Overflow(Overflow.Clip)
                     | (x.TrendComparedToPreviousPeriod != null
                         ? x.TrendComparedToPreviousPeriod >= 0
-                            ? Icons.TrendingUp.ToIcon().Color(Colors.Primary)
-                            : Icons.TrendingDown.ToIcon().Color(Colors.Red)
+                            ? Icons.TrendingUp.ToIcon().Color(Colors.Success)
+                            : Icons.TrendingDown.ToIcon().Color(Colors.Destructive)
                         : null)
                     | (x.TrendComparedToPreviousPeriod != null
                         ? x.TrendComparedToPreviousPeriod >= 0
-                            ? Text.Small(x.TrendComparedToPreviousPeriod.Value.ToString("P1")).Color(Colors.Primary)
-                            : Text.Small(x.TrendComparedToPreviousPeriod.Value.ToString("P1")).Color(Colors.Red)
+                            ? Text.Small(x.TrendComparedToPreviousPeriod.Value.ToString("P1")).Color(Colors.Success)
+                            : Text.Small(x.TrendComparedToPreviousPeriod.Value.ToString("P1")).Color(Colors.Destructive)
                         : null))
                 | (x.GoalAchieved != null ? new Progress((int)Math.Round(x.GoalAchieved.Value * 100.0)).ColorVariant(Progress.ColorVariants.EmeraldGradient).Goal(x.GoalFormatted) : null)
             ).Height(Size.Units(Height))
