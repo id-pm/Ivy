@@ -10,106 +10,11 @@ Authelia is an open-source authentication and authorization server providing com
 
 ## Setting Up Your Authelia Server
 
-Before using Authelia with Ivy, you need a running Authelia instance. Here are the most common setup approaches:
+Before using Authelia with Ivy, you must have a running Authelia instance. You can start with Authelia's [Get started](https://www.authelia.com/integration/prologue/get-started/) guide. Then, continue with the deployment instructions for your environment:
 
-### Option 1: Docker Compose (Recommended)
-
-Create a `docker-compose.yml` file:
-
-```yaml
-version: '3.7'
-services:
-  authelia:
-    image: authelia/authelia:latest
-    container_name: authelia
-    volumes:
-      - ./authelia:/config
-    ports:
-      - "9091:9091"
-    environment:
-      - AUTHELIA_JWT_SECRET=your-jwt-secret-here
-      - AUTHELIA_SESSION_SECRET=your-session-secret-here
-      - AUTHELIA_STORAGE_ENCRYPTION_KEY=your-encryption-key-here
-```
-
-### Option 2: Binary Installation
-
-1. **Download** from [Authelia releases](https://github.com/authelia/authelia/releases)
-2. **Extract** the binary
-3. **Create** a configuration file (see below)
-4. **Run**: `./authelia --config /path/to/configuration.yml`
-
-### Basic Configuration File
-
-Create `/config/configuration.yml`:
-
-```yaml
-server:
-  host: 0.0.0.0
-  port: 9091
-
-log:
-  level: info
-
-authentication_backend:
-  file:
-    path: /config/users_database.yml
-    password:
-      algorithm: argon2id
-
-access_control:
-  default_policy: deny
-  rules:
-    - domain: "localhost"
-      policy: one_factor
-
-session:
-  name: authelia_session
-  domain: localhost
-  same_site: lax
-  secret: your-session-secret
-
-storage:
-  local:
-    path: /config/db.sqlite3
-
-notifier:
-  filesystem:
-    filename: /config/notification.txt
-```
-
-### Create Users File
-
-Create `/config/users_database.yml`:
-
-```yaml
-users:
-  john:
-    displayname: "John Doe"
-    password: '$argon2id$v=19$m=65536,t=3,p=4$your-hashed-password-here'
-    email: john.doe@example.com
-    groups:
-      - users
-
-  admin:
-    displayname: "Administrator"
-    password: '$argon2id$v=19$m=65536,t=3,p=4$your-hashed-password-here'
-    email: admin@example.com
-    groups:
-      - admins
-      - users
-```
-
-**To hash passwords**, you can use Authelia's hash-password command:
-```bash
-authelia hash-password 'your-password-here'
-```
-
-### Getting Your Configuration
-
-Once your Authelia server is running:
-
-- **AUTHELIA_URL**: Your Authelia server URL (e.g., `http://localhost:9091` or `https://auth.yourdomain.com`)
+- [Docker](https://www.authelia.com/integration/deployment/docker/)
+- [Kubernetes](https://www.authelia.com/integration/kubernetes/introduction/)
+- [Bare-Metal](https://www.authelia.com/integration/deployment/bare-metal/)
 
 ## Adding Authentication
 
@@ -119,7 +24,9 @@ To set up Authelia Authentication with Ivy, run the following command and choose
 >ivy auth add
 ```
 
-You will be prompted to provide your Authelia server URL (e.g., `https://auth.yourdomain.com`).
+You will be prompted to provide your Authelia server URL (e.g., `https://127.0.0.1:9091` or `https://auth.yourdomain.com`).
+
+> **Note:** Authelia requires the use of HTTPS, even for local testing.
 
 Your configuration will be stored securely in .NET user secrets. Ivy then finishes configuring your application automatically:
 
@@ -127,25 +34,31 @@ Your configuration will be stored securely in .NET user secrets. Ivy then finish
 2. Adds `server.UseAuth<AutheliaAuthProvider>();` to your `Program.cs`.
 3. Adds `Ivy.Auth.Authelia` to your global usings.
 
-### Connection String Format
+### Advanced Configuration
 
-To skip the interactive prompts, you can provide configuration via a connection string parameter:
+#### Connection Strings
+
+To skip the interactive prompts, you can provide configuration via a connection string:
 
 ```terminal
 >ivy auth add --provider Authelia --connection-string "AUTHELIA_URL=https://auth.yourdomain.com"
 ```
 
-The connection string uses the following parameters:
+For a list of connection string parameters, see [Configuration Parameters](#configuration-parameters) below.
+
+#### Manual Configuration
+
+When deploying an Ivy project without using `ivy deploy`, your local .NET user secrets are not automatically transferred. In that case, you can configure Authelia auth by setting environment variables or .NET user secrets. See [Configuration Parameters](#configuration-parameters) below.
+
+> **Note:** If configuration is present in both .NET user secrets and environment variables, Ivy will use the values in **.NET user secrets over environment variables**.
+
+For more information, see [Authentication Overview](Overview.md).
+
+#### Configuration Parameters
+
+The following parameters are supported via connection string, environment variables, or .NET user secrets:
 
 - **AUTHELIA_URL**: Required. The base URL of your Authelia instance.
-
-### Advanced Configuration
-
-The following parameter can be manually set via .NET user secrets or environment variables:
-
-- **AUTHELIA_URL**: The base URL of your Authelia instance. Set by `ivy auth add`.
-
-If configuration is present in both .NET user secrets and environment variables, Ivy will use the values in .NET user secrets. For more information, see [Authentication Overview](Overview.md).
 
 ## Authentication Flow
 
@@ -191,7 +104,6 @@ Key features of the Authelia provider:
 - Check user credentials exist in your configured authentication backend
 - Verify password hashing matches Authelia's configuration
 - Ensure authentication backend (file, LDAP) is properly configured
-
 
 ## Related Documentation
 

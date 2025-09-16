@@ -64,4 +64,10 @@ public enum Colors
     Secondary,
     /// <summary>Destructive color for dangerous actions and errors.</summary>
     Destructive,
+    /// <summary>Success color for positive states and confirmations.</summary>
+    Success,
+    /// <summary>Warning color for cautionary states and alerts.</summary>
+    Warning,
+    /// <summary>Info color for informational states and messages.</summary>
+    Info,
 }
