@@ -471,32 +471,19 @@ public class FormBuilder<TModel> : ViewBase
         return _Place(col, row ? Guid.NewGuid() : null, fields);
     }
 
-    /// <summary>
-    /// Places the specified fields to span the full width across all columns.
-    /// </summary>
-    /// <param name="fields">The fields to place at full width.</param>
-    /// <returns>The form builder instance for method chaining.</returns>
-    /// <remarks>
-    /// Full-width fields are rendered separately from the column layout and span the entire
-    /// form width. They are useful for fields like text areas, long descriptions, or other
-    /// content that benefits from maximum horizontal space.
-    /// </remarks>
+    /// <summary>Places fields full width across all columns.</summary>
+    /// <param name="fields">Fields to span full width.</param>
+    /// <returns>Form builder instance.</returns>
     public FormBuilder<TModel> PlaceFullWidth(params Expression<Func<TModel, object>>[] fields)
     {
         return _Place(-1, null, fields); // Use -1 to indicate full width
     }
 
-    /// <summary>
-    /// Groups the specified fields under a named section in the specified column.
-    /// </summary>
-    /// <param name="group">The name of the group for organizing related fields.</param>
-    /// <param name="column">The column index where the grouped fields should be placed.</param>
-    /// <param name="fields">The fields to include in the named group.</param>
-    /// <returns>The form builder instance for method chaining.</returns>
-    /// <remarks>
-    /// Grouped fields are organized together with a group header and maintain their own ordering
-    /// within the group. This is useful for creating logical sections in complex forms.
-    /// </remarks>
+    /// <summary>Groups fields under a named section in a column.</summary>
+    /// <param name="group">Group name.</param>
+    /// <param name="column">Column index.</param>
+    /// <param name="fields">Fields in group.</param>
+    /// <returns>Form builder instance.</returns>
     public FormBuilder<TModel> Group(string group, int column, params Expression<Func<TModel, object>>[] fields)
     {
         int order = 0;

@@ -158,10 +158,8 @@ public class FormApp : SampleBase
             x.ToForm()
                 .Place(m => m.Name)                      // First column
                 .Place(1, m => m.Category, m => m.Price) // Second column
-                .PlaceFullWidth(m => m.Description)      // Full width
+                .Place(-1, m => m.Description)           // Full width
                 .PlaceFullWidth(m => m.Notes)            // Full width
-                .Builder(m => m.Description, s => s.ToTextAreaInput())
-                .Builder(m => m.Notes, s => s.ToTextAreaInput())
                 .Label(m => m.Name, "Product Name")
                 .Label(m => m.Category, "Category")
                 .Label(m => m.Price, "Price")

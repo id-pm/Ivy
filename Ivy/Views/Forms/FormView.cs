@@ -1,4 +1,4 @@
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
 using System.Reflection;
 using Ivy.Core;
 using Ivy.Core.Helpers;
@@ -256,7 +256,7 @@ public class FormView<TModel>(IFormFieldView[] fieldViews) : ViewBase
                     .Select(f =>
                         Layout.Vertical(
                             f.Key == null
-                                ? RenderRows(f.Select(g => g).ToArray())
+                                ? RenderRows(f.ToArray())
                                 : new Expandable(f.Key, RenderRows(f.ToArray()))
                         )).Cast<object>().ToArray()
             );
